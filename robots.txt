@@ -3,6 +3,6 @@
 User-agent: *
 Disallow:
 
-Sitemap: https://theoblossier.fr/sitemap.xml
+Sitemap: https://www.theoblossier.fr/sitemap.xml
 # ---------------------------
 # END YOAST BLOCK
