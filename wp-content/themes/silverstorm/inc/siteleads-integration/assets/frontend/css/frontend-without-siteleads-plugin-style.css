@@ -1,0 +1,139 @@
+/* Core Variables & Root */
+.silverstormtheme-siteleads-for-theme-root {
+  --sl-animation-duration: 400ms;
+  --sl-switch-animation-duration: 300ms;
+  --sl-fab-size: 54px;
+  --sl-chatbot-container-width: 400px;
+  --sl-chatbot-container-heigth: 448px;
+  --sl-channels-container-height: 48px;
+  --sl-terms-of-use-container-height: 26px;
+  --sl-fab-offset: 10px;
+  display: none;
+  position: fixed;
+  bottom: 20px;
+  color: #fff;
+  border: none;
+  z-index: 1001;
+}
+.silverstormtheme-siteleads-for-theme-root *::before,
+.silverstormtheme-siteleads-for-theme-root *::after {
+  content: none;
+  box-sizing: border-box;
+}
+.silverstormtheme-siteleads-for-theme-root * * > * {
+  font-family: inherit;
+  direction: ltr;
+}
+/* Visibility Logic */
+.silverstormtheme-siteleads-for-theme-root:has(.silverstormtheme-siteleads-for-theme-widget) {
+  display: none;
+}
+.silverstormtheme-siteleads-for-theme-root:has(.silverstormtheme-siteleads-for-theme-widget):has(.silverstormtheme-siteleads-for-theme-widget:not([data-init-state])) {
+  display: block;
+}
+.silverstormtheme-siteleads-for-theme-root {
+  animation: silverstormtheme-sl-widget-button-fade-in 400ms ease-in forwards !important;
+}
+@keyframes silverstormtheme-sl-widget-button-fade-in {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+/* Alignment: Right */
+.silverstormtheme-siteleads-for-theme-root.--silverstormtheme-siteleads-for-theme-root-alignment-right {
+  right: 20px;
+}
+/* Simple View Modifications */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-widget.--sl-simple-view {
+  --sl-contact-size: 40px;
+  --sl-channels-container-height: 0px;
+}
+/* Widget Container (FC Widgets) */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets {
+  display: none;
+  position: relative;
+  width: var(--sl-fab-size, 54px);
+  aspect-ratio: 1;
+}
+/* Simple View Layout (Matches data-view="simple") */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets:has(.--sl-simple-view .silverstormtheme-siteleads-for-theme-channel__wrapper) {
+  display: block;
+  direction: rtl;
+}
+/* Widget Base */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget {
+  position: absolute;
+  width: var(--sl-fab-size);
+  height: var(--sl-fab-size);
+  border: none;
+}
+/* Desktop/Simple View Flex layout */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets:has([data-device=dekstop], [data-view=simple]):not(.extra-1) {
+  display: flex;
+  gap: var(--sl-fab-offset);
+  align-items: center;
+}
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets:has([data-device=dekstop], [data-view=simple]):not(.extra-1) .silverstormtheme-siteleads-for-theme-widget {
+  position: relative;
+  min-width: var(--sl-fab-size);
+  min-height: var(--sl-fab-size);
+}
+/* Size Modifiers */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget.--medium-size {
+  --sl-fab-size: 54px;
+}
+/* Channels Container */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget .silverstormtheme-siteleads-for-theme-widget__channels {
+  position: relative;
+  width: var(--sl-fab-size, 54px);
+  height: var(--sl-fab-size, 54px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+/* Channel Wrapper */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget .silverstormtheme-siteleads-for-theme-widget__channels .silverstormtheme-siteleads-for-theme-channel__wrapper {
+  position: absolute;
+}
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget .silverstormtheme-siteleads-for-theme-widget__channels > .silverstormtheme-siteleads-for-theme-channel__wrapper {
+  opacity: 1; /* Default to visible per CSS logic */
+}
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-channel__wrapper {
+  display: grid;
+  place-content: center;
+  place-items: center;
+  width: var(--sl-fab-size, 54px);
+  height: var(--sl-fab-size, 54px);
+  border-radius: 100%;
+  transition: translate 400ms ease-out, opacity 400ms ease-in-out;
+}
+/* Channel Inner Link */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-channel__wrapper .silverstormtheme-siteleads-for-theme-channel {
+  display: grid;
+  place-items: center;
+  z-index: 10;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+  transition: scale 0.2s ease-in-out;
+}
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-widget .silverstormtheme-siteleads-for-theme-widget__channels > .silverstormtheme-siteleads-for-theme-channel__wrapper .silverstormtheme-siteleads-for-theme-channel:hover {
+  scale: 1.08;
+}
+/* Icons & SVGs */
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-channel__wrapper .silverstormtheme-siteleads-for-theme-channel__icon {
+  width: var(--sl-fab-size, 54px);
+  height: var(--sl-fab-size, 54px);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-channel__wrapper .silverstormtheme-siteleads-for-theme-channel__icon svg,
+.silverstormtheme-siteleads-for-theme-root .silverstormtheme-siteleads-for-theme-fc-widgets .silverstormtheme-siteleads-for-theme-channel__wrapper .silverstormtheme-siteleads-for-theme-channel__icon img {
+  width: 64%;
+  height: 64%;
+}

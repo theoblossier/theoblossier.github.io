@@ -11,7 +11,7 @@ Tags: entertainment,food-and-drink,portfolio,one-column,two-columns,right-sideba
 Version: @@build@@
 Text Domain: silverstorm
 
-Tested up to: 6.9
+Tested up to: 7.1
 Requires PHP: 5.8
 
 */
@@ -5430,6 +5430,10 @@ p.has-fit-text {
 
 /*end*/
 
+.wp-block-tab-list button {
+  padding: var(--wp--preset--spacing--20, 0.5em) var(--wp--preset--spacing--30, 1em);
+}
+
 .woocommerce-page,
 .woocommerce {
   font-size: calc(16px * 0.875);
@@ -9888,6 +9892,18 @@ hr + h2:before {
   color: inherit;
 }
 
+.colibri_logo_fancybox .fancybox-slide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+}
+
 [data-colibri-main-sidebar-col="1"] {
   /** @backwards compatibility */
 }
@@ -10075,6 +10091,10 @@ hr + h2:before {
 
 .h-hamburger-button {
   display: inline-block;
+}
+
+.h-hamburger-button .h-icon-svg svg {
+  display: inline;
 }
 
 ul.colibri-menu.bordered-active-item > li {

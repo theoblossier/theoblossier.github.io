@@ -131,13 +131,26 @@ class forminatorFrontUtils {
 		}
 	}
 
+	// Get the dial code (without "+") for a phone field, or "" if it doesn't apply.
+	get_phone_dial_code( $element ) {
+		if ( $element.data( 'national_mode' ) === 'enabled' ) {
+			return '';
+		}
+		if ( typeof window.intlTelInput === 'undefined' ) {
+			return '';
+		}
+		var iti = window.intlTelInput.getInstance( $element[0] );
+		return ( iti && iti.getSelectedCountryData().dialCode ) || '';
+	}
+
 	is_hidden( $element_id ) {
 		const $column_field = $element_id.closest('.forminator-col'),
 			$group_field = $element_id.closest('.forminator-field-group'),
 			$pagination_field = $element_id.closest('.forminator-pagination'),
 			$address_field = $element_id.closest('.forminator-field-address'),
 			$name_field = $element_id.closest('.forminator-field-name'),
-			$row_field = $column_field.closest('.forminator-row')
+			$row_field = $column_field.closest('.forminator-row'),
+			$time_field  = $element_id.closest('.forminator-field-time')
 		;
 
 		if( $column_field.hasClass("forminator-hidden-calculator") ) {
@@ -156,6 +169,10 @@ class forminatorFrontUtils {
 		}
 
 		if( $pagination_field.length > 0 && $pagination_field.hasClass( 'forminator-page-hidden' ) ) {
+			return true;
+		}
+
+		if( $time_field.length > 0  && $time_field.hasClass( 'forminator-hidden' ) ) {
 			return true;
 		}
 

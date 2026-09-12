@@ -55,6 +55,9 @@
 			var self = this;
 			var draftPage = !! this.$el.data( 'draft-page' ) ? this.$el.data( 'draft-page' ) : 0;
 
+			// Detect instant preview mode
+			this.instantPreview = this.$el.closest( '#forminator-instant-preview' ).length > 0;
+
 			this.next_button = this.settings.next_button ? this.settings.next_button : window.ForminatorFront.cform.pagination_next;
 			this.prev_button = this.settings.prev_button ? this.settings.prev_button : window.ForminatorFront.cform.pagination_prev;
 
@@ -62,6 +65,7 @@
 				this.form_id = this.$el.find('input[name=form_id]').val();
 			}
 
+			this.$form = this.$el;
 			this.totalSteps = this.settings.totalSteps;
 			this.totalActiveSteps = this.totalSteps
 			this.step = this.settings.step;
@@ -77,41 +81,47 @@
 				self.calculate_bar_percentage();
 			});
 
-			if ( draftPage > 0 ) {
-				this.go_to( draftPage, true );
-			} else if (this.settings.hashStep && this.step > 0) {
-				this.go_to(this.step, true);
-			} else if ( this.quiz ) {
-				this.go_to(0, true);
+			if ( this.instantPreview ) {
+				// Initialize for instant preview mode
+				this.init_instant_preview();
 			} else {
-				this.go_to(0, false);
-			}
-
-			this.render_navigation();
-			this.render_bar_navigation();
-			this.render_footer_navigation( this.form_id );
-			this.init_events();
-			this.update_navigation();
-
-			this.$el.find('.forminator-button.forminator-button-back, .forminator-button.forminator-button-next, .forminator-button.forminator-button-submit').on("click", function (e) {
-				e.preventDefault();
-				$(this).trigger('forminator.front.pagination.move');
-				self.resetRichTextEditorHeight();
-			});
-
-			// Update progress bar percentage on form submit.
-			this.$el.on('before:forminator:form:submit', function( e, formData ) {
-				if( formData.get( 'save_draft' ) !== 'true' ) {
-					self.update_progress_bar_percentage( 100 );
+				// Normal pagination initialization
+				if ( draftPage > 0 ) {
+					this.go_to( draftPage, true );
+				} else if (this.settings.hashStep && this.step > 0) {
+					this.go_to(this.step, true);
+				} else if ( this.quiz ) {
+					this.go_to(0, true);
+				} else {
+					this.go_to(0, false);
 				}
-			});
 
-			this.$el.on('click', '.forminator-result--view-answers', function(e){
-				e.preventDefault();
-				$(this).trigger('forminator.front.pagination.move');
-			});
+				this.render_navigation();
+				this.render_bar_navigation();
+				this.render_footer_navigation();
+				this.init_events();
+				this.update_navigation();
 
-			this.update_buttons();
+				this.$el.find('.forminator-button.forminator-button-back, .forminator-button.forminator-button-next, .forminator-button.forminator-button-submit').on("click", function (e) {
+					e.preventDefault();
+					$(this).trigger('forminator.front.pagination.move');
+					self.resetRichTextEditorHeight();
+				});
+
+				// Update progress bar percentage on form submit.
+				this.$el.on('before:forminator:form:submit', function( e, formData ) {
+					if( formData.get( 'save_draft' ) !== 'true' ) {
+						self.update_progress_bar_percentage( 100 );
+					}
+				});
+
+				this.$el.on('click', '.forminator-result--view-answers', function(e){
+					e.preventDefault();
+					$(this).trigger('forminator.front.pagination.move');
+				});
+
+				this.update_buttons();
+			}
 		},
 		init_events: function () {
 			var self = this;
@@ -146,6 +156,112 @@
 				self.on_focus_input(e, input);
 			});
 
+			this.$el.on( 'validation:invalid', function() {
+				var validator = self.$el.data( 'validator' );
+				if ( ! validator || ! validator.errorList.length ) {
+					return;
+				}
+				var errorPage = self.get_page_of_input( validator.errorList[0].element );
+				if ( errorPage !== self.step ) {
+					self.go_to( errorPage, true );
+					self.update_buttons();
+				}
+			} );
+
+		},
+
+		/**
+		 * Initialize pagination for instant preview mode
+		 * Shows all pages together with separators
+		 */
+		init_instant_preview: function () {
+			var self = this;
+
+			// Show all pages
+			this.$el.find('.forminator-pagination').css({
+				'height': 'auto',
+				'opacity': '1',
+				'visibility': 'visible'
+			}).removeAttr( 'aria-hidden' ).removeAttr( 'hidden' );
+
+			this.$el.find('.forminator-pagination .forminator-pagination--content').show();
+
+			// Get all pagination steps
+			const allSteps = this.$el.find('.forminator-pagination');
+			const tempElement = this.element;
+			const tempEl = this.$el;
+
+			allSteps.each(function(index) {
+				const $page = $(this);
+				const stepNum = $page.data('step') || 0;
+				const pageLabel = $page.data('actual-label') || '';
+
+				const $parent = $page.wrap('<div></div>');
+
+				// Add page separator before the entire pagination element
+				var separator = '<div class="forminator-instant-preview-separator" data-page-step="' + stepNum + '">' +
+					'<span class="sui-tag">' + self.encodeHTMLEntities(pageLabel) + '</span>' +
+				'</div>';
+				$page.before(separator);
+
+				// Get element name for this page to determine button text
+				self.element = $page.data('name');
+				self.$el = $parent;
+				self.step = stepNum;
+				self.actualStep = stepNum;
+
+				self.render_navigation();
+				self.render_bar_navigation();
+				self.render_footer_navigation();
+				self.update_navigation();
+			});
+
+			// Restore original element
+			this.element = tempElement;
+			this.$el = tempEl;
+
+			// Initialize scroll events for buttons
+			this.init_instant_preview_events();
+		},
+
+		/**
+		 * Generate footer button HTML (reusable for both normal and instant preview)
+		 *
+		 * @returns {string} Button HTML
+		 */
+		generate_footer_buttons_html: function() {
+			const isMaterial = this.$form.hasClass('forminator-design--material');
+			const extraClasses = this.instantPreview ? ' forminator-instant-preview-btn' : '';
+			const prevDataAttr = this.instantPreview ? ' data-nav="' + Math.max(0, this.step - 1) + '"' : '';
+			const nextDataAttr = this.instantPreview ? ' data-nav="' + Math.min(this.totalSteps, this.step + 1) + '"' : '';
+			const buttonText = isMaterial ? '<span class="forminator-button--mask" aria-label="hidden"></span><span class="forminator-button--text"></span>' : '';
+
+			return '<button class="forminator-button forminator-button-back' + extraClasses + '"' + prevDataAttr + '>' + buttonText + '</button>' +
+					'<button class="forminator-button forminator-button-next' + extraClasses + '"' + nextDataAttr + '>' + buttonText + '</button>';
+		},
+
+		/**
+		 * Initialize events for instant preview (scroll instead of navigate)
+		 */
+		init_instant_preview_events: function() {
+			const self = this;
+
+			// Handle navigation step clicks and next/prev button clicks - scroll to page
+			this.$el.on('click', '.forminator-instant-preview-nav, .forminator-instant-preview-btn', function(e) {
+				e.preventDefault();
+				let step = $(this).data('nav');
+				const $targetPage = self.$el.find('.forminator-instant-preview-separator[data-page-step="' + step + '"]');
+				let spaceBefore = $('#forminator-builder-status').height();
+				const $wpBody = $('#wpbody-content');
+				if ($wpBody.length) {
+					spaceBefore += $wpBody.offset().top;
+				}
+				if ($targetPage.length) {
+					$('html, body').animate({
+						scrollTop: $targetPage.offset().top - spaceBefore
+					}, 500);
+				}
+			});
 		},
 
 		/**
@@ -185,60 +301,74 @@
 			this.go_to(step, true);
 			this.update_buttons();
 		},
-		render_footer_navigation: function( form_id ) {
+
+		/**
+		 * Internal function to render footer navigation (shared by normal and instant preview)
+		 */
+		render_footer_navigation: function() {
+			const lastStep = this.totalSteps - 1 === this.step;
+
 			var footer_html = '',
 				paypal_field = '',
 				footer_align = ( this.custom_label['has-paypal'] === true ) ? ' style="align-items: flex-start;"' : '',
-				save_draft_btn = this.$el.find( '.forminator-save-draft-link' ).length ? this.$el.find( '.forminator-save-draft-link' ) : ''
+				save_draft_btn = this.$form.find( '.forminator-save-draft-link' ).length ? this.$form.find( '.forminator-save-draft-link' ) : ''
 				;
 
-			if ( this.custom_label[ this.element ] && this.custom_label[ 'pagination-labels' ] === 'custom' ){
-				this.prev_button_txt = this.custom_label[ this.element ][ 'prev-text' ] !== '' ? this.custom_label[ this.element ][ 'prev-text' ] : this.prev_button;
-				this.next_button_txt = this.custom_label[ this.element ][ 'next-text' ] !== '' ? this.custom_label[ this.element ][ 'next-text' ] : this.next_button;
+			// For instant preview, use the stored original button. Otherwise, find it normally.
+			if (this.instantPreview && this._original_save_draft_btn && this._original_save_draft_btn.length) {
+				save_draft_btn = this._original_save_draft_btn.clone();
 			} else {
-				this.prev_button_txt = this.prev_button;
-				this.next_button_txt = this.next_button;
+				this._original_save_draft_btn = save_draft_btn;
 			}
 
-			if ( this.$el.hasClass('forminator-design--material') ) {
-				footer_html = '<div class="forminator-pagination-footer"' + footer_align + '>' +
-					'<button class="forminator-button forminator-button-back"><span class="forminator-button--mask" aria-label="hidden"></span><span class="forminator-button--text">' + this.prev_button_txt + '</span></button>' +
-					'<button class="forminator-button forminator-button-next"><span class="forminator-button--mask" aria-label="hidden"></span><span class="forminator-button--text">' + this.next_button_txt + '</span></button>';
-				if( this.custom_label[ 'has-paypal' ] === true ) {
-					paypal_field = ( this.custom_label['paypal-id'] ) ? this.custom_label['paypal-id'] : '';
-					footer_html += '<div class="forminator-payment forminator-button-paypal forminator-hidden ' + paypal_field + '-payment" id="paypal-button-container-' + form_id + '">';
-				}
-				footer_html += '</div>';
-				this.$el.append( footer_html );
+			const buttons_html = this.generate_footer_buttons_html();
 
-			} else {
-				footer_html = '<div class="forminator-pagination-footer"' + footer_align + '>' +
-					'<button class="forminator-button forminator-button-back">' + this.prev_button_txt + '</button>' +
-					'<button class="forminator-button forminator-button-next">' + this.next_button_txt + '</button>';
-				if( this.custom_label['has-paypal'] === true ) {
-					paypal_field = ( this.custom_label['paypal-id'] ) ? this.custom_label['paypal-id'] : '';
-					footer_html += '<div class="forminator-payment forminator-button-paypal forminator-hidden ' + paypal_field + '-payment" id="paypal-button-container-' + form_id + '">';
-				}
-				footer_html += '</div>';
-				this.$el.append( footer_html );
-
+			// Build footer HTML
+			let footerClass = 'forminator-pagination-footer';
+			if (this.instantPreview) {
+				footerClass += ' forminator-instant-preview-footer';
 			}
+			footer_html = '<div class="' + footerClass + '"' + footer_align + '>' + buttons_html;
+			// Add PayPal button only once on last step for instant preview
+			if( this.custom_label['has-paypal'] === true && ( ! this.instantPreview || lastStep ) ) {
+				paypal_field = ( this.custom_label['paypal-id'] ) ? this.custom_label['paypal-id'] : '';
+				const paypalId = this.form_id ? ' id="paypal-button-container-' + this.form_id + '"' : '';
+				footer_html += '<div class="forminator-payment forminator-button-paypal forminator-hidden ' + paypal_field + '-payment"' + paypalId + '>';
+			}
+			footer_html += '</div>';
 
+			// Target is container, append footer
+			this.$el.append(footer_html);
+
+			// Handle save draft button
 			if ( '' !== save_draft_btn ) {
 				save_draft_btn.insertBefore( this.$el.find( '.forminator-button-next' ) );
 			}
 
+			// Handle button visibility for instant preview
+			if (this.instantPreview) {
+				this.update_buttons();
+			}
 		},
 
 		render_bar_navigation: function () {
 
-			var $navigation = this.$el.find( '.forminator-pagination-progress' );
+			var $navigation = this.$form.find( '.forminator-pagination-progress' );
 
 			var $progressLabel = '<div class="forminator-progress-label">0%</div>',
 				$progressBar   = '<div class="forminator-progress-bar"><span style="width: 0%"></span></div>'
 			;
 
 			if ( ! $navigation.length ) return;
+
+			if( this.instantPreview ) {
+				if ( ! this.$navigation ) {
+					// first time adding navigation
+					this.$navigation = $navigation.clone();
+					$navigation.remove();
+				}
+				$navigation = this.$navigation.clone().prependTo( this.$el );
+			}
 
 			$navigation.html( $progressLabel + $progressBar );
 
@@ -282,37 +412,52 @@
 		},
 
 		render_navigation: function () {
-			var $navigation = this.$el.find('.forminator-pagination-steps');
-
-			var finalSteps = this.$el.find('.forminator-pagination-start');
+			var $navigation = this.$form.find('.forminator-pagination-steps');
+			var finalSteps = this.$form.find('.forminator-pagination-start');
 
 			if ( ! $navigation.length ) return;
 
-			const render = $( this.$el ).data( 'forminator-render' ) || '';
+			let render = $( this.$form ).data( 'forminator-render' ) || '';
+			let $stepClass = 'forminator-step';
 
-			var steps = this.$el.find( '.forminator-pagination' ).not( '.forminator-pagination-start' );
+			if( this.instantPreview ) {
+				if ( ! this.$navigation ) {
+					// first time adding navigation
+					this.$navigation = $navigation.clone();
+					$navigation.remove();
+				}
+				$navigation = this.$navigation.clone().prependTo( this.$el );
+				$stepClass += ' forminator-instant-preview-nav';
+			}
 
-			var basicDesign = this.$el.hasClass('forminator-design--basic');
+			var steps = this.$form.find( '.forminator-pagination' ).not( '.forminator-pagination-start' );
+
+			var basicDesign = this.$form.hasClass('forminator-design--basic');
 
 			$navigation.append( '<div class="forminator-break"></div>' );
 
 			var self = this;
+			if ( basicDesign ) {
+				$stepClass += ' has-text-color';
+			}
+			if ( self.instantPreview ) {
+				// set sender random from 1 to 99 number to avoid duplicate ids
+				render = Math.floor(Math.random() * 99) + 1;
+			}
+			if( render ) {
+				render = '-' + render;
+			}
 
 			steps.each( function() {
 
 				var $step        = $( this ),
 					$stepLabel   = self.encodeHTMLEntities( $step.data( 'label' ) ),
 					$stepNumb    = $step.data('step') - 1,
-					$stepControl = 'forminator-custom-form-' + self.form_id + '-' + render + '--page-' + $stepNumb,
+					$stepControl = 'forminator-custom-form-' + self.form_id + render + '--page-' + $stepNumb,
 					$stepId      = $stepControl + '-label'
 				;
 
-				var $stepClass = 'forminator-step forminator-step-' + $stepNumb;
-				if ( basicDesign ) {
-					$stepClass += ' has-text-color';
-				}
-
-				var $stepMarkup = '<button role="tab" id="' + $stepId + '" class="' + $stepClass + '" aria-selected="false" aria-controls="' + $stepControl + '" data-nav="' + $stepNumb + '">' +
+				var $stepMarkup = '<button role="tab" id="' + $stepId + '" class="' + $stepClass + ' forminator-step-' + $stepNumb + '" aria-selected="false" aria-controls="' + $stepControl + '" data-nav="' + $stepNumb + '">' +
 					'<span class="forminator-step-label">' + $stepLabel + '</span>' +
 					'<span class="forminator-step-dot" aria-hidden="true"></span>' +
 				'</button>';
@@ -327,16 +472,11 @@
 				var $step   = $(this),
 					label   = self.encodeHTMLEntities( $step.data( 'label' ) ),
 					numb    = steps.length,
-					control = 'forminator-custom-form-' + self.form_id + '--page-' + numb,
+					control = 'forminator-custom-form-' + self.form_id + render + '--page-' + numb,
 					stepid  = control + '-label'
 				;
 
-				var $stepClass = 'forminator-step forminator-step-' + numb
-				if ( basicDesign ) {
-					$stepClass += ' has-text-color';
-				}
-
-				var $stepMarkup = '<button role="tab" id="' + stepid + '" class="' + $stepClass + '" data-nav="' + numb + '" aria-selected="false" aria-controls="' + control + '">' +
+				var $stepMarkup = '<button role="tab" id="' + stepid + '" class="' + $stepClass + ' forminator-step-' + numb + '" data-nav="' + numb + '" aria-selected="false" aria-controls="' + control + '">' +
 					'<span class="forminator-step-label">' + label + '</span>' +
 					'<span class="forminator-step-dot" aria-hidden="true"></span>' +
 				'</button>';
@@ -353,13 +493,15 @@
 		 * @param step
 		 */
 		handle_step: function( step ) {
-			if ( this.settings.inline_validation ) {
-				for ( var i = 0; i < step; i++ ) {
-					if ( this.step <= i ) {
-						if ( ! this.is_step_inputs_valid( i ) ) {
-							this.go_to( i, true );
-							return;
-						}
+			for ( var i = 0; i < step; i++ ) {
+				if ( this.step <= i ) {
+					if ( this.settings.inline_validation && ! this.is_step_inputs_valid( i ) ) {
+						this.go_to( i, true );
+						return;
+					}
+					if ( ! this.validate_captcha_on_step( i ) ) {
+						this.go_to( i, true );
+						return;
 					}
 				}
 			}
@@ -377,6 +519,11 @@
 					if ( ! this.is_step_inputs_valid( this.step ) ) {
 						return;
 					}
+				}
+
+				// Always validate captcha on current step before proceeding to next page.
+				if ( ! this.validate_captcha_on_step( this.step ) ) {
+					return;
 				}
 
 				if(typeof this.$el.data().forminatorFrontPayment !== "undefined") {
@@ -435,6 +582,7 @@
 			//get fields on current page
 			page.find("input, select, textarea")
 				.not(":submit, :reset, :image, :disabled")
+				.not(".forminator-field-signature :input:not(.do-validate)")
 				.not('[gramm="true"]')
 				.each(function (key, element) {
 					if (
@@ -461,6 +609,82 @@
 		},
 
 		/**
+		 * Validate captcha fields on a given step.
+		 * Shows an inline error and prevents navigation if captcha is not solved.
+		 *
+		 * @since 1.55
+		 * 
+		 * @param {number} step
+		 * @returns {boolean} true if valid (or no captcha / invisible), false otherwise
+		 */
+		validate_captcha_on_step: function ( step ) {
+			var page             = this.$el.find( 'div.forminator-pagination[data-step=' + step + ']' ),
+				$captcha_field   = page.find( '.forminator-g-recaptcha, .forminator-hcaptcha, .forminator-turnstile' ).first();
+
+			if ( ! $captcha_field.length ) {
+				return true;
+			}
+
+			// Skip validation for conditionally hidden pages.
+			if ( page.hasClass( 'forminator-page-hidden' ) ) {
+				return true;
+			}
+
+			// Skip if the captcha field is hidden.
+			if ( $captcha_field.closest( '.forminator-hidden' ).length ) {
+				return true;
+			}
+
+			var captcha_size     = $captcha_field.data( 'size' ),
+				$captcha_parent  = $captcha_field.parent( '.forminator-col' ),
+				captcha_widget   = null,
+				captcha_response = '';
+
+			// Invisible captcha is handled on submit, not on page navigation.
+			if ( captcha_size === 'invisible' ) {
+				return true;
+			}
+
+			if ( $captcha_field.hasClass( 'forminator-g-recaptcha' ) ) {
+				captcha_widget = $captcha_field.data( 'forminator-recapchta-widget' );
+				if ( typeof window.grecaptcha !== 'undefined' ) {
+					// Skip if the widget has not rendered yet.
+					if ( 0 === $captcha_field.children().length ) {
+						return true;
+					}
+					captcha_response = window.grecaptcha.getResponse( captcha_widget );
+				}
+			} else if ( $captcha_field.hasClass( 'forminator-hcaptcha' ) ) {
+				captcha_widget = $captcha_field.data( 'forminator-hcaptcha-widget' );
+				if ( typeof hcaptcha !== 'undefined' ) {
+					captcha_response = hcaptcha.getResponse( captcha_widget );
+				}
+			} else if ( $captcha_field.hasClass( 'forminator-turnstile' ) ) {
+				captcha_response = $captcha_field.find( 'input[name="forminator-turnstile-response"]' ).val() || '';
+			}
+
+			// Always clear stale captcha errors before re-evaluating.
+			$captcha_field.removeClass( 'error' );
+			$captcha_parent.removeClass( 'forminator-has_error' )
+				.find( '.forminator-error-message.forminator-invalid-captcha' ).remove();
+
+			if ( ! captcha_response ) {
+				$captcha_field.addClass( 'error' );
+				$captcha_parent.addClass( 'forminator-has_error' )
+					.append( '<span class="forminator-error-message forminator-invalid-captcha" aria-hidden="true">' + window.ForminatorFront.cform.captcha_error + '</span>' );
+
+				var forminatorFrontSubmit = this.$el.data( 'forminatorFrontSubmit' );
+				if ( forminatorFrontSubmit && typeof forminatorFrontSubmit.focus_to_element === 'function' ) {
+					forminatorFrontSubmit.focus_to_element( $captcha_parent );
+				}
+
+				return false;
+			}
+
+			return true;
+		},
+
+		/**
 		 * Get page on the input
 		 *
 		 * @since 1.0.3
@@ -482,7 +706,7 @@
 		},
 
 		update_buttons: function () {
-			var hasDraft = this.$el.hasClass( 'draft-enabled' ),
+			var hasDraft = this.$form.hasClass( 'draft-enabled' ),
 				self     = this;
 
 			if (this.step === 0) {
@@ -510,13 +734,17 @@
 				//keep pagination content on last step before submit
 				this.step--;
 				this.actualStep--;
-				this.$el.trigger( 'submit' );
+				this.$form.trigger( 'submit' );
 			}
 
 			var submitButtonClass = this.settings.submitButtonClass;
 			if ( this.actualStep === ( this.totalActiveSteps - 1 ) && ! this.finished ) {
 
-				var submit_button_text = this.$el.find('.forminator-pagination-submit').html(),
+				var submit_button_text = this.$form.hasClass('forminator-design--material')
+						? this.$el.find('.forminator-pagination-submit .forminator-button--text').html()
+						: this.$el.find('.forminator-pagination-submit').html(),
+					display_submit_button_text = $.trim( $( '<div />' ).html( submit_button_text ).text() ),
+					hasSubmitRightAway = this.$el.find( '.forminator-submit-rightaway').length,
 					loadingText = this.$el.find('.forminator-pagination-submit').data('loading'),
 					last_button_txt = ( this.custom_label[ 'pagination-labels' ] === 'custom'
 						&& this.custom_label['last-previous'] !== '' ) ? this.custom_label['last-previous'] : this.prev_button,
@@ -524,7 +752,13 @@
 					nextBtn = this.$el.find('.forminator-button-next'),
 					submitButton = this.$el.find( '.forminator-button-submit' );
 
-				if ( this.$el.hasClass('forminator-design--material') ) {
+				var viewResultsLabel = this.settings.view_results_text || window.ForminatorFront.quiz.view_results;
+
+				if ( this.$form.hasClass('forminator-quiz') && ! display_submit_button_text && hasSubmitRightAway ) {
+					submit_button_text = viewResultsLabel;
+				}
+
+				if ( this.$form.hasClass('forminator-design--material') ) {
 
 					this.$el.find('.forminator-button-back .forminator-button--text').html( last_button_txt );
 					nextBtn.removeClass('forminator-button-next').attr('id', 'forminator-submit');
@@ -533,9 +767,10 @@
 						function() {
 							nextBtn
 							.addClass('forminator-button-submit ' + submitButtonClass )
+							.attr('data-loading', loadingText)
 							.find('.forminator-button--text')
 							.html('')
-							.html(submit_button_text).data('loading', loadingText);
+							.html(submit_button_text);
 							self.$el.trigger( 'forminator.front.pagination.buttons.updated' );
 						},
 						20
@@ -548,7 +783,7 @@
 						function() {
 							nextBtn
 							.addClass( 'forminator-button-submit ' + submitButtonClass )
-							.html( submit_button_text ).data('loading', loadingText);
+							.html(submit_button_text).data('loading', loadingText);
 							self.$el.trigger( 'forminator.front.pagination.buttons.updated' );
 						},
 						20
@@ -559,24 +794,32 @@
 				setTimeout(
 					function() {
 						submitButton = self.$el.find( '.forminator-button-submit' );
+
+						if ( self.$form.hasClass('forminator-quiz') && ! display_submit_button_text ) {
+							submitButton.addClass('forminator-hidden');
+
+							if ( hasSubmitRightAway ) {
+								if ( self.$form.hasClass('forminator-design--material') ) {
+									submitButton.find( '.forminator-button--text' ).html( viewResultsLabel );
+								} else {
+									submitButton.html( viewResultsLabel );
+								}
+							}
+						}
 					},
 					30
 				);
-
-				if ( this.$el.hasClass('forminator-quiz') && ! submit_button_text ) {
-					submitButton.addClass('forminator-hidden');
-					if ( this.$el.find( '.forminator-submit-rightaway').length ) {
-						submitButton.html( window.ForminatorFront.quiz.view_results );
-					}
-				}
 
 				if( this.custom_label['has-paypal'] === true ) {
 					forminatorPayment.attr('id', 'forminator-paypal-submit');
 
 					setTimeout(
 						function() {
-							if ( ! window.paypalHasCondition.includes( self.$el.data( 'form-id' ) ) ) {
+							const $stripe_element = self.$form.find('.forminator-field-stripe-ocs:not(.forminator-hidden), .forminator-field-stripe:not(.forminator-hidden)');
+							if ( ! window.paypalHasCondition.includes( self.$el.data( 'form-id' ) )  ) {
+							if( $stripe_element.length === 0 ){
 								submitButton.addClass('forminator-hidden');
+							}
 								forminatorPayment.removeClass( 'forminator-hidden' );
 							}
 						},
@@ -589,7 +832,7 @@
 				}
 
 			} else {
-				this.element = this.$el.find('.forminator-pagination[data-step=' + this.step + ']').data('name');
+				this.element = this.$form.find('.forminator-pagination[data-step=' + this.step + ']').data('name');
 				if ( this.custom_label[this.element] && this.custom_label['pagination-labels'] === 'custom'){
 					this.prev_button_txt = this.custom_label[this.element]['prev-text'] !== '' ? this.custom_label[this.element]['prev-text'] : this.prev_button;
 					this.next_button_txt = this.custom_label[this.element]['next-text'] !== '' ? this.custom_label[this.element]['next-text'] : this.next_button;
@@ -598,9 +841,9 @@
 					this.next_button_txt = this.next_button;
 				}
 				if ( this.actualStep === ( this.totalActiveSteps - 1 ) && this.finished ) {
-					this.next_button_txt = window.ForminatorFront.quiz.view_results;
+					this.next_button_txt = this.settings.view_results_text || window.ForminatorFront.quiz.view_results;
 				}
-				if ( this.$el.hasClass('forminator-design--material') ) {
+				if ( this.$form.hasClass('forminator-design--material') ) {
 					this.$el.find( '#forminator-submit' )
 						.removeAttr( 'id' )
 						.removeClass( 'forminator-button-submit forminator-hidden ' + submitButtonClass )

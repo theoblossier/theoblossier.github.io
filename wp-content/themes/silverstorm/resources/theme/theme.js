@@ -60,7 +60,7 @@
 /******/ 	__webpack_require__.p = "/";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 125);
+/******/ 	return __webpack_require__(__webpack_require__.s = 128);
 /******/ })
 /************************************************************************/
 /******/ ([
@@ -632,7 +632,7 @@ exports.default = function (instance, Constructor) {
 
 exports.__esModule = true;
 
-var _defineProperty = __webpack_require__(130);
+var _defineProperty = __webpack_require__(133);
 
 var _defineProperty2 = _interopRequireDefault(_defineProperty);
 
@@ -835,7 +835,7 @@ exports.f = __webpack_require__(8) ? gOPD : function getOwnPropertyDescriptor(O,
 /* 54 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(135), __esModule: true };
+module.exports = { "default": __webpack_require__(138), __esModule: true };
 
 /***/ }),
 /* 55 */,
@@ -927,11 +927,11 @@ exports.default = function (self, call) {
 
 exports.__esModule = true;
 
-var _setPrototypeOf = __webpack_require__(137);
+var _setPrototypeOf = __webpack_require__(140);
 
 var _setPrototypeOf2 = _interopRequireDefault(_setPrototypeOf);
 
-var _create = __webpack_require__(141);
+var _create = __webpack_require__(144);
 
 var _create2 = _interopRequireDefault(_create);
 
@@ -989,11 +989,11 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.ColibriFrontComponent = exports.ColibriFrontend = undefined;
 
-var _colibri = __webpack_require__(104);
+var _colibri = __webpack_require__(107);
 
 var _colibri2 = _interopRequireDefault(_colibri);
 
-var _colibriKubeComponent = __webpack_require__(129);
+var _colibriKubeComponent = __webpack_require__(132);
 
 var _colibriKubeComponent2 = _interopRequireDefault(_colibriKubeComponent);
 
@@ -1696,7 +1696,10 @@ module.exports = function (KEY, exec) {
 /* 100 */,
 /* 101 */,
 /* 102 */,
-/* 103 */
+/* 103 */,
+/* 104 */,
+/* 105 */,
+/* 106 */
 /***/ (function(module, exports, __webpack_require__) {
 
 /* WEBPACK VAR INJECTION */(function(global) {/**
@@ -2080,7 +2083,7 @@ module.exports = debounce;
 /* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(28)))
 
 /***/ }),
-/* 104 */
+/* 107 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2544,7 +2547,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 });
 
 /***/ }),
-/* 105 */
+/* 108 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2650,7 +2653,7 @@ var BaseHandler = function () {
 exports.default = BaseHandler;
 
 /***/ }),
-/* 106 */
+/* 109 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2693,7 +2696,7 @@ var linksDefineSamePage = function linksDefineSamePage(link1, link2) {
 exports.default = linksDefineSamePage;
 
 /***/ }),
-/* 107 */
+/* 110 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -2991,9 +2994,6 @@ exports.default = linksDefineSamePage;
 })(jQuery, Colibri);
 
 /***/ }),
-/* 108 */,
-/* 109 */,
-/* 110 */,
 /* 111 */,
 /* 112 */,
 /* 113 */,
@@ -3008,19 +3008,22 @@ exports.default = linksDefineSamePage;
 /* 122 */,
 /* 123 */,
 /* 124 */,
-/* 125 */
+/* 125 */,
+/* 126 */,
+/* 127 */,
+/* 128 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(126);
-__webpack_require__(165);
-__webpack_require__(166);
-__webpack_require__(167);
+__webpack_require__(129);
 __webpack_require__(168);
-module.exports = __webpack_require__(169);
+__webpack_require__(169);
+__webpack_require__(170);
+__webpack_require__(171);
+module.exports = __webpack_require__(172);
 
 
 /***/ }),
-/* 126 */
+/* 129 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3028,17 +3031,17 @@ module.exports = __webpack_require__(169);
 
 __webpack_require__(63);
 
-__webpack_require__(127);
+__webpack_require__(130);
 
-__webpack_require__(128);
+__webpack_require__(131);
 
 var _base = __webpack_require__(64);
 
-var _customizableSlideshow = __webpack_require__(133);
+var _customizableSlideshow = __webpack_require__(136);
 
 var _customizableSlideshow2 = _interopRequireDefault(_customizableSlideshow);
 
-var _customizableVideoBackground = __webpack_require__(144);
+var _customizableVideoBackground = __webpack_require__(147);
 
 var _customizableVideoBackground2 = _interopRequireDefault(_customizableVideoBackground);
 
@@ -3063,29 +3066,29 @@ _base.ColibriFrontend.domReady = _domready2.default;
 
 window.Colibri = _base.ColibriFrontend;
 
-__webpack_require__(154);
-__webpack_require__(155);
-__webpack_require__(156);
-__webpack_require__(107);
+__webpack_require__(157);
+__webpack_require__(158);
+__webpack_require__(159);
+__webpack_require__(110);
 
 //
 // // sticky
 //
-__webpack_require__(157);
-__webpack_require__(158);
-__webpack_require__(159);
 __webpack_require__(160);
 __webpack_require__(161);
-__webpack_require__(107);
+__webpack_require__(162);
+__webpack_require__(163);
+__webpack_require__(164);
+__webpack_require__(110);
 
 /***/ }),
-/* 127 */
+/* 130 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _lodash = __webpack_require__(103);
+var _lodash = __webpack_require__(106);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -3168,7 +3171,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(window.jQuery);
 
 /***/ }),
-/* 128 */
+/* 131 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3333,7 +3336,7 @@ window.removeResizeListener = function (element, fn) {
 };
 
 /***/ }),
-/* 129 */
+/* 132 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3351,7 +3354,7 @@ var _createClass2 = __webpack_require__(44);
 
 var _createClass3 = _interopRequireDefault(_createClass2);
 
-var _colibri = __webpack_require__(104);
+var _colibri = __webpack_require__(107);
 
 var _colibri2 = _interopRequireDefault(_colibri);
 
@@ -3419,16 +3422,16 @@ var ColibriFrontComponent = function () {
 exports.default = ColibriFrontComponent;
 
 /***/ }),
-/* 130 */
+/* 133 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(131), __esModule: true };
+module.exports = { "default": __webpack_require__(134), __esModule: true };
 
 /***/ }),
-/* 131 */
+/* 134 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(132);
+__webpack_require__(135);
 var $Object = __webpack_require__(3).Object;
 module.exports = function defineProperty(it, key, desc) {
   return $Object.defineProperty(it, key, desc);
@@ -3436,7 +3439,7 @@ module.exports = function defineProperty(it, key, desc) {
 
 
 /***/ }),
-/* 132 */
+/* 135 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(16);
@@ -3445,7 +3448,7 @@ $export($export.S + $export.F * !__webpack_require__(8), 'Object', { definePrope
 
 
 /***/ }),
-/* 133 */
+/* 136 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3459,7 +3462,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _slideshow = __webpack_require__(134);
+var _slideshow = __webpack_require__(137);
 
 var _slideshow2 = _interopRequireDefault(_slideshow);
 
@@ -3529,7 +3532,7 @@ var CustomizableSlideshow = function (_Slideshow) {
 exports.default = CustomizableSlideshow;
 
 /***/ }),
-/* 134 */
+/* 137 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3561,7 +3564,7 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _index = __webpack_require__(64);
 
-var _lodash = __webpack_require__(103);
+var _lodash = __webpack_require__(106);
 
 var _lodash2 = _interopRequireDefault(_lodash);
 
@@ -3665,15 +3668,15 @@ var Slideshow = function (_ColibriFrontComponen) {
 exports.default = Slideshow;
 
 /***/ }),
-/* 135 */
+/* 138 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(136);
+__webpack_require__(139);
 module.exports = __webpack_require__(3).Object.getPrototypeOf;
 
 
 /***/ }),
-/* 136 */
+/* 139 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.9 Object.getPrototypeOf(O)
@@ -3688,30 +3691,30 @@ __webpack_require__(90)('getPrototypeOf', function () {
 
 
 /***/ }),
-/* 137 */
+/* 140 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(138), __esModule: true };
+module.exports = { "default": __webpack_require__(141), __esModule: true };
 
 /***/ }),
-/* 138 */
+/* 141 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(139);
+__webpack_require__(142);
 module.exports = __webpack_require__(3).Object.setPrototypeOf;
 
 
 /***/ }),
-/* 139 */
+/* 142 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.3.19 Object.setPrototypeOf(O, proto)
 var $export = __webpack_require__(16);
-$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(140).set });
+$export($export.S, 'Object', { setPrototypeOf: __webpack_require__(143).set });
 
 
 /***/ }),
-/* 140 */
+/* 143 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // Works with __proto__ only. Old v8 can't work with null proto objects.
@@ -3742,16 +3745,16 @@ module.exports = {
 
 
 /***/ }),
-/* 141 */
+/* 144 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(142), __esModule: true };
+module.exports = { "default": __webpack_require__(145), __esModule: true };
 
 /***/ }),
-/* 142 */
+/* 145 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(143);
+__webpack_require__(146);
 var $Object = __webpack_require__(3).Object;
 module.exports = function create(P, D) {
   return $Object.create(P, D);
@@ -3759,7 +3762,7 @@ module.exports = function create(P, D) {
 
 
 /***/ }),
-/* 143 */
+/* 146 */
 /***/ (function(module, exports, __webpack_require__) {
 
 var $export = __webpack_require__(16);
@@ -3768,7 +3771,7 @@ $export($export.S, 'Object', { create: __webpack_require__(40) });
 
 
 /***/ }),
-/* 144 */
+/* 147 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3782,7 +3785,7 @@ var _createClass = function () { function defineProperties(target, props) { for 
 
 var _get = function get(object, property, receiver) { if (object === null) object = Function.prototype; var desc = Object.getOwnPropertyDescriptor(object, property); if (desc === undefined) { var parent = Object.getPrototypeOf(object); if (parent === null) { return undefined; } else { return get(parent, property, receiver); } } else if ("value" in desc) { return desc.value; } else { var getter = desc.get; if (getter === undefined) { return undefined; } return getter.call(receiver); } };
 
-var _videoBg = __webpack_require__(145);
+var _videoBg = __webpack_require__(148);
 
 var _videoBg2 = _interopRequireDefault(_videoBg);
 
@@ -3892,7 +3895,7 @@ var CustomizableVideoBackground = function (_VideoBackground) {
 exports.default = CustomizableVideoBackground;
 
 /***/ }),
-/* 145 */
+/* 148 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -3924,11 +3927,11 @@ var _inherits3 = _interopRequireDefault(_inherits2);
 
 var _index = __webpack_require__(64);
 
-var _handlers = __webpack_require__(146);
+var _handlers = __webpack_require__(149);
 
 var _handlers2 = _interopRequireDefault(_handlers);
 
-var _isMobile = __webpack_require__(153);
+var _isMobile = __webpack_require__(156);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
@@ -4058,7 +4061,7 @@ var VideoBackground = function (_ColibriFrontComponen) {
 exports.default = VideoBackground;
 
 /***/ }),
-/* 146 */
+/* 149 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4068,11 +4071,11 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _nativeHandler = __webpack_require__(147);
+var _nativeHandler = __webpack_require__(150);
 
 var _nativeHandler2 = _interopRequireDefault(_nativeHandler);
 
-var _youtubeHandler = __webpack_require__(148);
+var _youtubeHandler = __webpack_require__(151);
 
 var _youtubeHandler2 = _interopRequireDefault(_youtubeHandler);
 
@@ -4086,7 +4089,7 @@ var Handlers = {
 exports.default = Handlers;
 
 /***/ }),
-/* 147 */
+/* 150 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4116,7 +4119,7 @@ var _inherits2 = __webpack_require__(60);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _baseHandler = __webpack_require__(105);
+var _baseHandler = __webpack_require__(108);
 
 var _baseHandler2 = _interopRequireDefault(_baseHandler);
 
@@ -4209,7 +4212,7 @@ var NativeHandler = function (_BaseHandler) {
 exports.default = NativeHandler;
 
 /***/ }),
-/* 148 */
+/* 151 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4235,7 +4238,7 @@ var _possibleConstructorReturn2 = __webpack_require__(59);
 
 var _possibleConstructorReturn3 = _interopRequireDefault(_possibleConstructorReturn2);
 
-var _get2 = __webpack_require__(149);
+var _get2 = __webpack_require__(152);
 
 var _get3 = _interopRequireDefault(_get2);
 
@@ -4243,7 +4246,7 @@ var _inherits2 = __webpack_require__(60);
 
 var _inherits3 = _interopRequireDefault(_inherits2);
 
-var _baseHandler = __webpack_require__(105);
+var _baseHandler = __webpack_require__(108);
 
 var _baseHandler2 = _interopRequireDefault(_baseHandler);
 
@@ -4463,7 +4466,7 @@ var YouTubeHandler = function (_BaseHandler) {
 exports.default = YouTubeHandler;
 
 /***/ }),
-/* 149 */
+/* 152 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4475,7 +4478,7 @@ var _getPrototypeOf = __webpack_require__(54);
 
 var _getPrototypeOf2 = _interopRequireDefault(_getPrototypeOf);
 
-var _getOwnPropertyDescriptor = __webpack_require__(150);
+var _getOwnPropertyDescriptor = __webpack_require__(153);
 
 var _getOwnPropertyDescriptor2 = _interopRequireDefault(_getOwnPropertyDescriptor);
 
@@ -4507,16 +4510,16 @@ exports.default = function get(object, property, receiver) {
 };
 
 /***/ }),
-/* 150 */
+/* 153 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(151), __esModule: true };
+module.exports = { "default": __webpack_require__(154), __esModule: true };
 
 /***/ }),
-/* 151 */
+/* 154 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(152);
+__webpack_require__(155);
 var $Object = __webpack_require__(3).Object;
 module.exports = function getOwnPropertyDescriptor(it, key) {
   return $Object.getOwnPropertyDescriptor(it, key);
@@ -4524,7 +4527,7 @@ module.exports = function getOwnPropertyDescriptor(it, key) {
 
 
 /***/ }),
-/* 152 */
+/* 155 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.6 Object.getOwnPropertyDescriptor(O, P)
@@ -4539,7 +4542,7 @@ __webpack_require__(90)('getOwnPropertyDescriptor', function () {
 
 
 /***/ }),
-/* 153 */
+/* 156 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -4571,13 +4574,13 @@ function isMobile(opts) {
 }
 
 /***/ }),
-/* 154 */
+/* 157 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _linksDefineSamePage = __webpack_require__(106);
+var _linksDefineSamePage = __webpack_require__(109);
 
 var _linksDefineSamePage2 = _interopRequireDefault(_linksDefineSamePage);
 
@@ -4876,7 +4879,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery);
 
 /***/ }),
-/* 155 */
+/* 158 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5209,13 +5212,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 156 */
+/* 159 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _linksDefineSamePage = __webpack_require__(106);
+var _linksDefineSamePage = __webpack_require__(109);
 
 var _linksDefineSamePage2 = _interopRequireDefault(_linksDefineSamePage);
 
@@ -5521,7 +5524,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 157 */
+/* 160 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -5812,7 +5815,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 158 */
+/* 161 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6724,7 +6727,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(window.jQuery, window, document);
 
 /***/ }),
-/* 159 */
+/* 162 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6781,7 +6784,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 160 */
+/* 163 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -6895,13 +6898,13 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 161 */
+/* 164 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-var _keys = __webpack_require__(162);
+var _keys = __webpack_require__(165);
 
 var _keys2 = _interopRequireDefault(_keys);
 
@@ -7050,21 +7053,21 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
 })(jQuery, Colibri);
 
 /***/ }),
-/* 162 */
+/* 165 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = { "default": __webpack_require__(163), __esModule: true };
+module.exports = { "default": __webpack_require__(166), __esModule: true };
 
 /***/ }),
-/* 163 */
+/* 166 */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(164);
+__webpack_require__(167);
 module.exports = __webpack_require__(3).Object.keys;
 
 
 /***/ }),
-/* 164 */
+/* 167 */
 /***/ (function(module, exports, __webpack_require__) {
 
 // 19.1.2.14 Object.keys(O)
@@ -7079,24 +7082,6 @@ __webpack_require__(90)('keys', function () {
 
 
 /***/ }),
-/* 165 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 166 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
-/* 167 */
-/***/ (function(module, exports) {
-
-// removed by extract-text-webpack-plugin
-
-/***/ }),
 /* 168 */
 /***/ (function(module, exports) {
 
@@ -7104,6 +7089,24 @@ __webpack_require__(90)('keys', function () {
 
 /***/ }),
 /* 169 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 170 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 171 */
+/***/ (function(module, exports) {
+
+// removed by extract-text-webpack-plugin
+
+/***/ }),
+/* 172 */
 /***/ (function(module, exports) {
 
 // removed by extract-text-webpack-plugin

@@ -7940,6 +7940,8 @@ img {
 
 .h-hamburger-button {
   display: inline-block; }
+  .h-hamburger-button .h-icon-svg svg {
+    display: inline; }
 
 ul.colibri-menu.bordered-active-item > li {
   position: relative; }
@@ -9453,6 +9455,17 @@ figure {
   font-style: inherit;
   font-weight: inherit;
   color: inherit; }
+
+.colibri_logo_fancybox .fancybox-slide {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center; }
 
 .h-section > div {
   z-index: 1; }
@@ -12822,6 +12835,8 @@ p.has-fit-text {
   outline: none; }
 
 /*end*/
+.wp-block-tab-list button {
+  padding: var(--wp--preset--spacing--20, 0.5em) var(--wp--preset--spacing--30, 1em); }
 
 .colibri-video-background:before {
   content: " ";
